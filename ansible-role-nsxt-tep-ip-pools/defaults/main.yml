@@ -1,0 +1,11 @@
+# Variables file for deploying TEP IP pools
+#
+{
+  #
+  # Common NSX Appliance variables
+  #
+  "nsx_username": "admin",
+  "nsx_password": "YourPwdHere",
+  "validate_certs": False,
+  "state": "present"
+}

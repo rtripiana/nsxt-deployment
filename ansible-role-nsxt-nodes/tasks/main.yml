@@ -1,0 +1,23 @@
+#
+# Role to deploy NSX Transport and Edge nodes
+#
+
+- name: Create Transport Nodes
+  nsxt_transport_nodes:
+    hostname: "{{ nsx_mgr_vip }}"
+    username: "{{ nsx_username }}"
+    password: "{{ nsx_password }}"
+    validate_certs: "{{ validate_certs }}"
+    display_name: "{{ item.display_name }}"
+    host_switch_spec:
+      resource_type: StandardHostSwitchSpec
+      host_switches: #"{{ item.host_switches }}"
+      - host_switch_profiles: "{{ host_switch_profiles[item.node_deployment_info.resource_type] }}"
+        host_switch_name: "{{ host_switch_name }}"
+        pnics: "{{ pnics[item.node_deployment_info.resource_type] }}"
+        ip_assignment_spec: "{{ item.ip_assignment_spec }}"
+    transport_zone_endpoints: "{{ transport_zone_endpoints }}"
+    node_deployment_info: "{{ item.node_deployment_info }}"
+    state: "{{ state }}"
+  with_items:
+    - "{{ transport_nodes }}"

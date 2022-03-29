@@ -1,0 +1,79 @@
+---
+    # Variables file for deploying Nodes
+    #
+    {
+      #
+      # Common NSX Appliance variables
+      #
+      "nsx_username": "admin",
+      "nsx_password": "YourPwdHere",
+      "validate_certs": False,
+      "state": "present",
+
+      #
+      # Default Transport zone. 
+      # 
+      "transport_zone_endpoints": [
+        {
+          "transport_zone_name": "TZ-Overlay"
+        }
+      ],
+
+      #
+      # Common host switch profiles details
+      #
+      "host_switch_profiles": {
+        "HostNode": [
+          {
+            "name": "esxi-uplink-profile1",        #in prod there will be a single Uplink profile because VLAN ID is always the same
+            "type": "UplinkHostSwitchProfile"
+          },
+          {
+            "name": "nsx-default-nioc-hostswitch-profile",
+            "type": "NiocProfile"
+          },
+          {
+            "name": "LLDP [Send Packet Disabled]",
+            "type": "LldpHostSwitchProfile"
+          }
+        ],
+        "EdgeNode": [
+          {
+            "name": "edge-uplink-profile",
+            "type": "UplinkHostSwitchProfile"
+          },
+          {
+            "name": "LLDP [Send Packet Disabled]",
+            "type": "LldpHostSwitchProfile"
+          }
+        ]
+      },
+      
+
+      #
+      # Default host switch name
+      #
+      "host_switch_name": "NVDS-Overlay",
+
+      #
+      # Common physical NICs mapping
+      #
+      "pnics": {
+        "HostNode": [
+          {
+          "device_name": "vmnic1",          # vmnic1 for the nested lab case
+          "uplink_name": "LAG-NSX-0"
+#         },
+#         {
+#         "device_name": "vmnic5",
+#         "uplink_name": "LAG-NSX-1"
+          }
+        ],
+        "EdgeNode": [
+          {
+            "device_name": "fp-eth0",
+            "uplink_name": "edge-uplink1"
+          }
+        ],
+      }
+    }

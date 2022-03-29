@@ -1,0 +1,12 @@
+---
+# Variables file for register a compute manager
+#
+{
+  #
+  # Common NSX Appliance variables
+  #
+  "nsx_username": "admin",
+  "nsx_password": "YourPwdHere",
+  "validate_certs": False,
+  "state": "present",      #  "absent" does not work
+}

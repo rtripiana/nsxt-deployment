@@ -1,0 +1,15 @@
+#
+# Role to build NSX Edge Clusters
+#
+- name: Add edge cluster
+  nsxt_edge_clusters:
+    hostname: "{{ nsx_mgr_vip }}"
+    username: "{{ nsx_username }}"
+    password: "{{ nsx_password }}"
+    validate_certs: "{{ validate_certs }}"
+    display_name: "{{ item.display_name }}"
+    cluster_profile_bindings: "{{ cluster_profile_bindings }}"
+    members: "{{ item.members }}"
+    state: "{{ state }}"
+  with_items:
+    - "{{ edge_clusters }}"

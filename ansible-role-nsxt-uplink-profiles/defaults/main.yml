@@ -1,0 +1,62 @@
+---
+    # Variables file for deploying Uplink Profiles
+    #
+    {
+      #
+      # Common NSX Appliance variables
+      #
+      "nsx_username": "admin",
+      "nsx_password": "YourPwdHere",
+      "validate_certs": False,
+      "state": "present",
+
+      #
+      # Common UL profile details. 
+      # 
+
+      "uplink_profiles_def": {
+        "esxi-uplink-profile": {
+          "lags": [
+            {
+              "name": "LAG-NSX",
+              "mode": "ACTIVE",
+              "load_balance_algorithm": "SRCDESTIPVLAN",
+              "number_of_uplinks": "2",
+              "uplinks": [
+                {
+                  "uplink_name": "LAG-NSX-0",
+                  "uplink_type": "PNIC"
+                },
+                {
+                  "uplink_name": "LAG-NSX-1",
+                  "uplink_type": "PNIC"
+                }
+              ]
+            }
+          ],
+          "teaming": {
+            "active_list": [
+              {
+                "uplink_name": "LAG-NSX",   #---> lab name
+                "uplink_type": "LAG"     #-----> PNIC or LAG
+              }
+            ],
+            "policy": "FAILOVER_ORDER"
+          },
+          "mtu": "9000"  
+        },
+        "edge-uplink-profile": {
+          "lags": [],
+          "teaming": {
+            "active_list": [
+              {
+                "uplink_name": "edge-uplink1",   #---> lab name
+                "uplink_type": "PNIC"     #-----> PNIC or LAG
+              }
+            ],
+            "policy": "FAILOVER_ORDER"
+          },
+          "mtu": "9000"           
+        }
+      }
+    }

@@ -1,0 +1,21 @@
+---
+  # Variables file for set up edge clusters
+  #
+  {
+    #
+    # Common NSX Appliance variables
+    #
+    "nsx_username": "admin",
+    "nsx_password": "YourPwdHere",
+    "validate_certs": False,
+    "state": "present",
+
+    #
+    # Common cluster variables
+    #
+    "cluster_profile_bindings": [
+      {
+        "profile_name": "nsx-default-edge-high-availability-profile"
+      }
+    ]
+  }

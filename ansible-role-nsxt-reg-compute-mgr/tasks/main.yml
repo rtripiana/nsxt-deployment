@@ -1,0 +1,20 @@
+#
+# Role to register Compute Managers with NSX Appliance
+#
+- name: Register compute managers
+  nsxt_fabric_compute_managers:
+    hostname: "{{ nsx_mgr_vip }}"
+    username: "{{ nsx_username }}"
+    password: "{{ nsx_password }}"
+    validate_certs: "{{ validate_certs }}"
+    display_name: "{{ item.display_name }}"
+    server: "{{ item.mgmt_ip }}"
+    origin_type: "{{ item.origin_type }}"
+    credential:
+      credential_type: "{{ item.credential_type }}"
+      username: "{{ item.username }}"
+      password: "{{ item.password }}"
+    state: "{{ state }}"
+  with_items:
+        - "{{ compute_managers }}"
+  delegate_to: localhost

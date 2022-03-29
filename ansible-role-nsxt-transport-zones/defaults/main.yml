@@ -1,0 +1,49 @@
+# Variables file for deploying TZ
+#
+{
+  #
+  # Common NSX Appliance variables
+  #
+  "nsx_username": "admin",
+  "nsx_password": "YourPwdHere",
+  "validate_certs": False,
+  "state": "present"
+
+  #
+  # TZs data. Include shared Overlay TZ and VLAN backed TZs to
+  # support L3 peering
+  #
+
+  "transport_zones": [
+    {
+      "display_name": "TZ-Overlay",
+      "description": "NSX Configured Overlay Transport Zone",
+      "transport_type": "OVERLAY",
+      "host_switch_name": "NVDS-Overlay"
+    },
+    {
+      "display_name": "TZ-Ext1",
+      "description": "NSX Configured VLAN Transport Zone1",
+      "transport_type": "VLAN",
+      "host_switch_name": "NVDS-Ext1"
+    },
+    {
+      "display_name": "TZ-Ext2",
+      "description": "NSX Configured VLAN Transport Zone2",
+      "transport_type": "VLAN",
+      "host_switch_name": "NVDS-Ext2"
+    },
+    {
+      "display_name": "TZ-Ext3",
+      "description": "NSX Configured VLAN Transport Zone3",
+      "transport_type": "VLAN",
+      "host_switch_name": "NVDS-Ext3"
+    },
+    {
+      "display_name": "TZ-Ext4",
+      "description": "NSX Configured VLAN Transport Zone4",
+      "transport_type": "VLAN",
+      "host_switch_name": "NVDS-Ext4"
+    }
+  ]
+}

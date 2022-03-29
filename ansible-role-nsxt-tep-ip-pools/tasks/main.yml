@@ -1,0 +1,15 @@
+#
+# Role to deploy the first NSX Appliance node. Also checks the node
+# status
+#
+- name: Create IP Pools
+  nsxt_ip_pools:
+    hostname: "{{ nsx_mgr_vip }}"
+    username: "{{ nsx_username }}"
+    password: "{{ nsx_password }}"
+    validate_certs: "{{ validate_certs }}"
+    display_name: "{{ item.display_name }}"
+    subnets: "{{ item.subnets }}"
+    state: "{{ state }}"
+  with_items:
+    - "{{ ip_pools }}"

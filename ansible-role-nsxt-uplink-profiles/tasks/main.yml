@@ -1,0 +1,20 @@
+#
+# Role to deploy NSX uplink profiles for both types, Transport and Edge nodes
+#
+- name: Create Uplink Profiles
+  nsxt_uplink_profiles:
+    hostname: "{{ nsx_mgr_vip }}"
+    username: "{{ nsx_username }}"
+    password: "{{ nsx_password }}"
+    validate_certs: "{{ validate_certs }}"
+    resource_type: UplinkHostSwitchProfile
+    display_name: "{{ item.display_name }}"
+    description: "{{ item.description }}"
+    mtu: "{{ uplink_profiles_def[item.type].mtu }}"         # Replace by "item" if want to point to non-default values
+    transport_vlan: "{{ item.transport_vlan }}"
+    lags: "{{ uplink_profiles_def[item.type].lags }}"       # Replace by "item" if want to point to non-default values
+    teaming: "{{ uplink_profiles_def[item.type].teaming }}" # Replace by "item" if want to point to non-default values
+    state: "{{ state }}"
+  with_items:
+    - "{{ uplink_profiles }}"
+    

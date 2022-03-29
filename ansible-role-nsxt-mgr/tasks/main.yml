@@ -1,0 +1,51 @@
+#
+# Role to deploy the first NSX Appliance node. Also checks the node
+# status
+#
+- name: Deploy NSX Manager OVA
+  nsxt_deploy_ova:
+    ovftool_path: "/usr/bin" # watch out!!
+    datacenter: "{{ compute_cluster['datacenter'] }}"
+    datastore: "{{ compute_cluster['datastore'] }}"
+    portgroup: "{{ compute_cluster['portgroup'] }}"
+    cluster: "{{ compute_cluster['cluster'] }}"
+    vmname: "{{ item.vmname }}"
+    hostname: "{{ item.hostname }}"
+    dns_server: "{{ dns_server }}"
+    dns_domain: "{{ domain }}"
+    ntp_server: "{{ ntp_server }}"
+    gateway: "{{ gateway }}"
+    ip_address: "{{ item.mgmt_ip }}"
+    netmask: "{{ netmask }}"
+    admin_password: "{{ nsx_password }}"
+    cli_password: "{{ nsx_password }}"
+    path_to_ova: "{{ nsx_ova_path }}"
+    ova_file: "{{ nsx_ova }}"
+    vcenter: "{{ compute_managers[0]['mgmt_ip'] }}"
+    vcenter_user: "{{ compute_managers[0]['username'] }}"
+    vcenter_passwd: "{{ compute_managers[0]['password'] }}"
+    deployment_size: "{{ dep_size }}"  
+    role: "NSX Manager"
+  delegate_to: localhost
+  with_items:
+    - "{{ nsx_nodes }}"
+
+- name: Check manager status
+  nsxt_manager_status:
+    hostname: "{{ item.mgmt_ip }}"
+    username: "{{ nsx_username }}"
+    password: "{{ nsx_password }}"
+    validate_certs: "{{ validate_certs }}"
+    wait_time: 50
+  delegate_to: localhost
+  with_items:
+    - "{{ nsx_nodes }}"
+
+- name: Waiting for Manager node complete boot
+  pause:
+    minutes: 5
+    prompt: "Waiting for Manager node complete boot"
+  delegate_to: localhost
+
+- name: Build cluster
+  command: python3 {{ role_path }}/files/build-cluster.py {{ nsx_nodes[0].mgmt_ip }} {{ nsx_username }} {{ nsx_password }} {{ nsx_nodes[1].mgmt_ip }} {{ nsx_nodes[2].mgmt_ip }} {{ nsx_mgr_vip }} {{ validate_certs }}
